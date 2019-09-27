@@ -22,7 +22,7 @@ def create_app(config=""):
 
     @ask.intent("BookFinderIntent")
     def hello(book):
-        logger.debug(f"query: {} {}".format(book, type(book)))
+        logger.debug("query: {} {}".format(book, type(book)))
         # send request to shelfie to highlight LOTR
 
         text = 'the book you asked for is {}'.format(book)
