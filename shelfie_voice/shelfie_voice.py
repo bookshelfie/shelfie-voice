@@ -6,7 +6,7 @@
 from flask import Flask
 from flask import render_template
 from flask_ask import Ask, statement
-
+from shelfie_voice.logger import logger
 
 def create_app(config=""):
     """App creation factory"""
@@ -22,10 +22,10 @@ def create_app(config=""):
 
     @ask.intent("BookFinderIntent")
     def hello(book):
-        print(f"query: {book} {type(book)}")
+        logger.debug(f"query: {} {}".format(book, type(book)))
         # send request to shelfie to highlight LOTR
 
-        text = f'the book you asked for is {book}'
+        text = 'the book you asked for is {}'.format(book)
         return statement(text).simple_card('Hello', text)
 
     return app
