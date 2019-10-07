@@ -1,31 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Shelfie voice app.
-"""
-from flask import Flask
-from flask import render_template
-from flask_ask import Ask, statement
-from shelfie_voice.logger import logger
+"""shelfie_voice Alexa Skill"""
 
-def create_app(config=""):
-    """App creation factory"""
+from flask import Flask
+
+from shelfie_voice.logger import logger
+from shelfie_voice.extensions import ask
+
+def create_app(config="config.base"):
+    """App creation factory
+    Pass configuration from instance folder to
+    setup links to the shelfie_server.
+    See README.md for more info.
+    """
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object("config.base")
     if config:
         app.config.from_object(config)
     app.config.from_pyfile("config.py", silent=True)
     app.config.from_envvar("SHELFIE_VOICE", silent=True)
-
-
-    ask = Ask(app, "/")
-
-    @ask.intent("BookFinderIntent")
-    def hello(book):
-        logger.debug("query: {} {}".format(book, type(book)))
-        # send request to shelfie to highlight LOTR
-
-        text = 'the book you asked for is {}'.format(book)
-        return statement(text).simple_card('Hello', text)
-
+    ask.init_app(app)
     return app
