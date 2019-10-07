@@ -5,6 +5,8 @@
 
 import requests
 from flask import current_app
+from shelfie_voice.logger import logger
+
 
 def find_books(book):
     """Given a book's name, this function calls the API for the shelf."""
@@ -13,6 +15,7 @@ def find_books(book):
         "title": book
     }
     response = requests.get(url, params=data)
+    logger.debug(response.content)
     return response.json()
 
 
@@ -23,4 +26,5 @@ def find_books_by_author(author):
         "author": author
     }
     response = requests.get(url, params=data)
+    logger.debug(response.content)
     return response.json()
