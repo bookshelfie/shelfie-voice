@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """Alexa extension"""
-
+import random
 from flask_ask import Ask, statement
 
 from shelfie_voice.logger import logger
@@ -24,9 +24,21 @@ def find_book(book):
     logger.debug("Trying to find books with title containing '{}'".format(book))
     book = utils.find_books(book)
     if book is not None:
-        text = "Oh! I know where that book is! Let me show you."
+        responses = [
+            "Oh! I know where that book is! Let me show you.",
+            "Ah, here you go.",
+            "That is easy. I'll point it out to you.",
+            "One book, coming right up.",
+            "There it is."
+        ]
+        text = random.choice(responses)
     else:
-        text = "I don't know where you put that book. Do you have it?"
+        responses = [
+            "I don't know where you put that book. Do you have it?",
+            "If you kept your books better organized, you'd know that you probably don't have that book.",
+            "Do you own that book? I don't see it anywhere.",
+        ]
+        text = random.choice(responses)
     return statement(text).simple_card('Hello', text)
 
 
