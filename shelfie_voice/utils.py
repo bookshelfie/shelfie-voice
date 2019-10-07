@@ -9,7 +9,7 @@ from flask import current_app
 
 def find_books(book):
     """Given a book's name, this function calls the API for the shelf."""
-    url = "{}/book/".format(current_app.config["SHELFIE_SERVER_URL"])
+    url = "{}/api/v1/book/".format(current_app.config["SHELFIE_SERVER_URL"])
     data = {
         "title": book
     }
@@ -20,7 +20,7 @@ def find_books(book):
 
 def find_books_by_author(author):
     """Given an author's name, find all the books by him."""
-    url = "{}/author/".format(current_app.config["SHELFIE_SERVER_URL"])
+    url = "{}/api/v1/author/".format(current_app.config["SHELFIE_SERVER_URL"])
     data = {
         "author": author
     }
