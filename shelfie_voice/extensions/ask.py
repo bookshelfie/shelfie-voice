@@ -1,12 +1,10 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 """Alexa extension"""
 import random
+from flask import current_app
 from flask_ask import Ask, statement
-
-from shelfie_voice.logger import logger
 from shelfie_voice import utils
-
 ask = Ask(route="/")
 
 
@@ -14,14 +12,13 @@ ask = Ask(route="/")
 def find_book(book):
     """Receives the book query string from alexa
     Sample queries:
-
-    >>> Ask my bookshelf where I've placed {book}
-    >>> Ask my bookshelf where is my copy of {book}
-    >>> Ask my bookshelf where's {book}
-    >>> Ask my bookshelf where I've kept {book}
-    >>> Ask my bookshelf where is {book}
+        >>> Ask my bookshelf where I've placed {book}
+        >>> Ask my bookshelf where is my copy of {book}
+        >>> Ask my bookshelf where's {book}
+        >>> Ask my bookshelf where I've kept {book}
+        >>> Ask my bookshelf where is {book}
     """
-    logger.debug("Trying to find books with title containing '{}'".format(book))
+    current_app.logger.debug("Trying to find books with title containing '{}'".format(book))
     book = utils.find_books(book)
     if book is not None:
         responses = [
@@ -35,7 +32,8 @@ def find_book(book):
     else:
         responses = [
             "I don't know where you put that book. Do you have it?",
-            "If you kept your books better organized, you'd know that you probably don't have that book.",
+            ("If you kept your books better organized, "
+            "you'd know that you probably don't have that book."),
             "Do you own that book? I don't see it anywhere.",
         ]
         text = random.choice(responses)
@@ -50,8 +48,12 @@ def find_author(author):
     >>> Ask my bookshelf where are {author}'s books
     >>> Ask my bookshelf where I've placed books by {author}.
     """
-    logger.debug(
+    if author.endswith("'s"):
+        # sanitize apostrophes.
+        author = author[:-2]
+    current_app.logger.debug(
         "Trying to find books by author: '{}'".format(author))
+
     books = utils.find_books_by_author(author)
     if books is not None:
         text = "I found some books by {}! Here they are.".format(author)
